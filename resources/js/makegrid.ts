@@ -2459,7 +2459,7 @@ const makeGrid = function (t, enableResize = undefined, enableReorder = undefine
 
             // Keyboard events for cell selection
             $(document).on('keydown', function (e) {
-                if (document.activeElement && $(document.activeElement).is('input, textarea, select')) {
+                if (document.activeElement && $(document.activeElement).is('input, select')) {
                     return; // do not interfere with input fields
                 }
 

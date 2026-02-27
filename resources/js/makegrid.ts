@@ -2616,8 +2616,10 @@ const makeGrid = function (t, enableResize = undefined, enableReorder = undefine
 
                 selectCell(this);
 
-                // Prevent text selection
-                e.preventDefault();
+
+                $(g.t).on('mouseleave.cellSelect', 'td.data', function () {
+                    window.getSelection().removeAllRanges();
+                });
 
                 // Dynamic mouseover for drag
                 $(g.t).on('mouseover.cellSelect', 'td.data, thead th:not(.column_action)', function (e) {
@@ -2660,13 +2662,15 @@ const makeGrid = function (t, enableResize = undefined, enableReorder = undefine
                 $(document).on('mouseup.cellSelect', function () {
                     g.isSelectingCells = false;
                     $(g.t).off('mouseover.cellSelect');
+                    $(g.t).off('mouseleave.cellSelect');
                     $(document).off('mouseup.cellSelect');
                 });
             });
 
             // Copy handler
             $(document).on('copy', function (e) {
-                if (!document.body.contains(g.t)) {
+                const selection = window.getSelection();
+                if (!document.body.contains(g.t) || (selection.rangeCount > 0 && !selection.isCollapsed)) {
                     return;
                 }
 
